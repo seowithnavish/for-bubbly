@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I'm Sorry, Bubbly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-light:#fde6ec;
+    --pink-check:#f7b8c9;
+    --pink-deep:#e8628c;
+    --pink-deep-2:#d94f78;
+    --text-dark:#7a3b52;
+    --white:#fffaf9;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'Nunito', sans-serif;
+    color:var(--text-dark);
+    background:var(--pink-light);
+    overflow-x:hidden;
+  }
+
+  .gingham{
+    background-image:
+      repeating-linear-gradient(0deg, var(--pink-check) 0px, var(--pink-check) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(90deg, var(--pink-check) 0px, var(--pink-check) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(0deg, rgba(247,184,201,0.35) 0px, rgba(247,184,201,0.35) 20px, transparent 20px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(247,184,201,0.35) 0px, rgba(247,184,201,0.35) 20px, transparent 20px, transparent 40px),
+      var(--pink-light);
+  }
+
+  section{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:60px 24px;
+    position:relative;
+  }
+
+  .bow{
+    position:absolute;
+    font-size:34px;
+    opacity:0.9;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,0.08));
+    pointer-events:none;
+  }
+  .bow.tl{ top:24px; left:20px; transform:rotate(-12deg); }
+  .bow.tr{ top:30px; right:24px; transform:rotate(10deg); }
+  .bow.bl{ bottom:28px; left:28px; transform:rotate(8deg); }
+  .bow.br{ bottom:24px; right:22px; transform:rotate(-10deg); }
+
+  h1, h2{
+    font-family:'Quicksand', sans-serif;
+    color:var(--pink-deep);
+    font-weight:700;
+  }
+
+  .icon{
+    font-size:64px;
+    margin-bottom:18px;
+    animation:bob 3s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-10px); }
+  }
+
+  .name-tag{
+    font-family:'Quicksand', sans-serif;
+    color:var(--pink-deep-2);
+    font-weight:700;
+    font-size:1.4rem;
+    margin-bottom:22px;
+  }
+
+  /* MUSIC TOGGLE */
+  .music-btn{
+    position:fixed;
+    top:16px;
+    right:16px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink-deep), var(--pink-deep-2));
+    color:#fff;
+    border:none;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 12px rgba(216,79,120,0.4);
+    cursor:pointer;
+    z-index:999;
+    transition:transform 0.2s ease;
+  }
+  .music-btn.playing{ animation:bob 1.2s ease-in-out infinite; }
+  .music-btn:active{ transform:scale(0.92); }
+
+  /* SECTION 1 — apology lines */
+  .apology-lines p{
+    font-size:1.05rem;
+    line-height:1.8;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp 0.8s ease forwards;
+    max-width:360px;
+  }
+  .apology-lines p:nth-child(1){ animation-delay:0.4s; }
+  .apology-lines p:nth-child(2){ animation-delay:1.4s; }
+  .apology-lines p:nth-child(3){ animation-delay:2.4s; }
+  .apology-lines p:nth-child(4){ animation-delay:3.4s; }
+  .apology-lines p:nth-child(5){ animation-delay:4.4s; }
+  @keyframes fadeUp{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .scroll-hint{
+    margin-top:34px;
+    font-size:0.85rem;
+    color:var(--pink-deep);
+    opacity:0;
+    animation:fadeUp 0.8s ease forwards;
+    animation-delay:5.4s;
+  }
+  .scroll-hint span{ display:inline-block; animation:bob 1.6s ease-in-out infinite; }
+
+  /* SECTION 2 — promises */
+  .promise-list{
+    width:100%;
+    max-width:380px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-top:8px;
+  }
+  .promise-card{
+    background:var(--pink-deep);
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:18px 20px;
+    font-family:'Nunito', sans-serif;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--pink-deep-2);
+    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.3s ease;
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .promise-card:active{
+    transform:translateY(3px);
+    box-shadow:0 1px 0 var(--pink-deep-2);
+  }
+  .promise-card.revealed{
+    background:#fff;
+    color:var(--text-dark);
+    font-weight:600;
+    box-shadow:0 4px 0 var(--pink-check);
+    cursor:default;
+  }
+
+  /* SECTION 3 — heart of hearts */
+  .heart-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:2px;
+    width:240px;
+    margin-bottom:24px;
+  }
+  .heart-grid span{
+    font-size:18px;
+    line-height:1;
+    opacity:0;
+    animation:popIn 0.4s ease forwards;
+  }
+  @keyframes popIn{
+    to{ opacity:1; transform:scale(1); }
+    from{ transform:scale(0.4); }
+  }
+  .heart-msg{
+    max-width:340px;
+    font-size:1rem;
+    line-height:1.7;
+    margin-bottom:26px;
+  }
+
+  /* buttons shared */
+  .pink-btn{
+    background:linear-gradient(135deg, var(--pink-deep), var(--pink-deep-2));
+    color:#fff;
+    border:none;
+    border-radius:30px;
+    padding:14px 36px;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(216,79,120,0.35);
+    transition:transform 0.15s ease;
+  }
+  .pink-btn:active{ transform:scale(0.96); }
+  .pink-btn:disabled{ opacity:0.5; cursor:default; }
+
+  .pink-btn-outline{
+    background:#fff;
+    color:var(--pink-deep);
+    border:2px solid var(--pink-deep);
+    border-radius:30px;
+    padding:12px 30px;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:transform 0.15s ease;
+  }
+  .pink-btn-outline:active{ transform:scale(0.96); }
+
+  /* SECTION 4 — treats */
+  .treat-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    max-width:340px;
+    margin:22px 0 28px;
+  }
+  .treat-option{
+    background:#fff;
+    border:3px solid transparent;
+    border-radius:16px;
+    padding:18px 10px;
+    cursor:pointer;
+    font-size:40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    transition:border-color 0.2s ease, transform 0.15s ease;
+  }
+  .treat-option span.label{
+    font-family:'Nunito', sans-serif;
+    font-size:0.78rem;
+    font-weight:700;
+    color:var(--text-dark);
+  }
+  .treat-option:active{ transform:scale(0.96); }
+  .treat-option.selected{
+    border-color:var(--pink-deep);
+    background:#fff0f4;
+  }
+  .treat-result{
+    max-width:340px;
+    font-size:1rem;
+    line-height:1.7;
+    min-height:30px;
+  }
+  .treat-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    justify-content:center;
+    margin-top:18px;
+  }
+
+  /* SECTION 5 — final */
+  .final-msg{
+    max-width:340px;
+    font-size:1.05rem;
+    line-height:1.8;
+    margin-top:6px;
+  }
+
+  footer{
+    text-align:center;
+    padding:30px;
+    font-size:0.8rem;
+    color:var(--pink-deep-2);
+  }
+</style>
+</head>
+<body class="gingham">
+
+  <button class="music-btn" id="musicBtn" title="Play music">🎵</button>
+  <audio id="bgMusic" loop preload="none">
+    <source src="background.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- SECTION 1: APOLOGY -->
+  <section id="sec1">
+    <span class="bow tl">🎀</span>
+    <span class="bow tr">🎀</span>
+    <div class="icon">🧸</div>
+    <div class="name-tag">Bubbly</div>
+    <div class="apology-lines">
+      <p>I'm really sorry... 😔❤️</p>
+      <p>I didn't mean to hurt you... 😢</p>
+      <p>I know I messed up, and I truly regret it... 😞🙏</p>
+      <p>You mean a lot to me, more than I show sometimes ❤️</p>
+      <p>And I hate seeing you upset because of me... 🥺</p>
+    </div>
+    <div class="scroll-hint">scroll down <span>↓</span></div>
+    <span class="bow bl">🎀</span>
+    <span class="bow br">🎀</span>
+  </section>
+
+  <!-- SECTION 2: PROMISES -->
+  <section id="sec2">
+    <span class="bow tl">🎀</span>
+    <span class="bow tr">🎀</span>
+    <h2 style="margin-bottom:24px;">My Promises to You, Bubbly</h2>
+    <div class="promise-list" id="promiseList">
+      <button class="promise-card" data-text="I promise to answer all the question you have. ❤️">Tap to reveal 🤍</button>
+      <button class="promise-card" data-text="I promise to respect you, always 💛">Tap to reveal 🤍</button>
+      <button class="promise-card" data-text="I promise to make you smile even on bad days 😊">Tap to reveal 🤍</button>
+      <button class="promise-card" data-text="I promise to ki main hamesa fusal jaunga, whenever you will try 😂💖">Tap to reveal 🤍</button>
+    </div>
+    <button class="pink-btn" style="margin-top:30px;" onclick="document.getElementById('sec3').scrollIntoView()">More surprises ✨</button>
+    <span class="bow bl">🎀</span>
+    <span class="bow br">🎀</span>
+  </section>
+
+  <!-- SECTION 3: HEART -->
+  <section id="sec3">
+    <span class="bow tl">🎀</span>
+    <span class="bow tr">🎀</span>
+    <div class="heart-grid" id="heartGrid"></div>
+    <h2 style="font-size:1.2rem;">Every heartbeat reminds me of you, Bubbly</h2>
+    <p class="heart-msg">Maine ye sirf tumhe smile krne ke liye banaya hain, i know ki maine hi tumhe rulaya bhi hain <br> 1 nhi, 2 nhi more then 5+ times. but one chance lets build new stroy between us from beginning.</p>
+    <button class="pink-btn" onclick="document.getElementById('sec4').scrollIntoView()">Claim it 💗</button>
+    <span class="bow bl">🎀</span>
+    <span class="bow br">🎀</span>
+  </section>
+
+  <!-- SECTION 4: TREAT PICKER -->
+  <section id="sec4">
+    <span class="bow tl">🎀</span>
+    <span class="bow tr">🎀</span>
+    <h2 style="font-size:1.2rem; margin-bottom:4px;">Choose your treat for our next meeting</h2>
+    <p style="font-size:0.85rem; margin-bottom:10px;">Pick whatever you're craving 🍓</p>
+    <div class="treat-grid" id="treatGrid">
+      <div class="treat-option" data-treat="Pizza" data-emoji="🍕">🍕<span class="label">Pizza</span></div>
+      <div class="treat-option" data-treat="Pasta" data-emoji="🍝">🍝<span class="label">Pasta</span></div>
+      <div class="treat-option" data-treat="Chocolates" data-emoji="🍫">🍫<span class="label">Chocolates</span></div>
+      <div class="treat-option" data-treat="Fries & Shake" data-emoji="🍟">🍟<span class="label">Fries &amp; shake</span></div>
+      <div class="treat-option" data-treat="Golgappe" data-emoji="🥟">🥟<span class="label">Golgappe</span></div>
+      <div class="treat-option" data-treat="Cold Coffee" data-emoji="🥤">🥤<span class="label">Cold Coffee</span></div>
+    </div>
+    <p class="treat-result" id="treatResult"></p>
+    <div class="treat-actions" id="treatActions" style="display:none;">
+      <button class="pink-btn-outline" id="downloadBtn">⬇️ Share with me </button>
+      <button class="pink-btn" id="treatNextBtn" onclick="document.getElementById('sec5').scrollIntoView()">Continue 💌</button>
+    </div>
+    <span class="bow bl">🎀</span>
+    <span class="bow br">🎀</span>
+  </section>
+
+  <!-- SECTION 5: FINAL -->
+  <section id="sec5">
+    <span class="bow tl">🎀</span>
+    <span class="bow tr">🎀</span>
+    <div class="icon">🐱</div>
+    <h2>Now you forgive me</h2>
+    <p class="final-msg">Please smile and do a call 📞<br>I want to hear your beautiful voice and smile, Bubbly ❤️</p>
+    <span class="bow bl">🎀</span>
+    <span class="bow br">🎀</span>
+  </section>
+
+  <footer>made with 🩷 for Bubbly</footer>
+
+<script>
+  // ---- MUSIC TOGGLE ----
+  const musicBtn = document.getElementById('musicBtn');
+  const bgMusic = document.getElementById('bgMusic');
+  let isPlaying = false;
+  musicBtn.addEventListener('click', ()=>{
+    if(isPlaying){
+      bgMusic.pause();
+      musicBtn.textContent = '🎵';
+      musicBtn.classList.remove('playing');
+    } else {
+      bgMusic.play().catch(()=>{ /* autoplay blocked, ignore */ });
+      musicBtn.textContent = '🔇';
+      musicBtn.classList.add('playing');
+    }
+    isPlaying = !isPlaying;
+  });
+
+  // Promise reveal
+  document.querySelectorAll('.promise-card').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.classList.contains('revealed')) return;
+      btn.textContent = btn.dataset.text;
+      btn.classList.add('revealed');
+    });
+  });
+
+  // Heart made of hearts (7-wide grid, pyramid pattern)
+  const heartPattern = [
+    [0,1,1,0,1,1,0],
+    [1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1],
+    [0,1,1,1,1,1,0],
+    [0,0,1,1,1,0,0],
+    [0,0,0,1,0,0,0]
+  ];
+  const heartGrid = document.getElementById('heartGrid');
+  let delay = 0;
+  heartPattern.forEach(row=>{
+    row.forEach(cell=>{
+      const span = document.createElement('span');
+      span.textContent = cell ? '❤️' : '';
+      span.style.animationDelay = (delay*0.04)+'s';
+      heartGrid.appendChild(span);
+      if(cell) delay++;
+    });
+  });
+
+  // ---- TREAT PICKER + PNG DOWNLOAD ----
+  const treatMessages = {
+    "Pizza": "Your choice is perfect, Bubbly! 😍 I already can't wait for our pizza party 💕 Be ready, it's going to be special ✨",
+    "Pasta": "Your choice is perfect, Bubbly! 😍 Pasta party it is — I can't wait 💕 Be ready, it's going to be awesome ✨",
+    "Chocolates": "Your choice is perfect, Bubbly! 😍 Chocolates for my favorite person 💕 Be ready, it's going to be Lovelable ✨",
+    "Fries & Shake": "Your choice is perfect, Bubbly! 😍 Fries & shake, I already can't wait 💕 Be ready, it's going to be special ✨",
+    "Golgappe": "Your choice is perfect, Bubbly! 😍 Golgappe, my favorite too 💕 Be ready, it's going to be special with you✨",
+    "Cold Coffee": "Your choice is perfect, Bubbly! 😍 Cold coffee, I can't wait 💕 Be ready, it's going to be more special with BHU Vibe ✨"
+  };
+
+  let selectedTreat = null;
+  let selectedEmoji = null;
+
+  document.querySelectorAll('.treat-option').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      document.querySelectorAll('.treat-option').forEach(o=>o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedTreat = opt.dataset.treat;
+      selectedEmoji = opt.dataset.emoji;
+      document.getElementById('treatResult').textContent = treatMessages[selectedTreat];
+      document.getElementById('treatActions').style.display = 'flex';
+    });
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    if(!selectedTreat) return;
+    drawTreatCard(selectedTreat, selectedEmoji, treatMessages[selectedTreat]);
+  });
+
+  function drawTreatCard(treat, emoji, message){
+    const W = 800, H = 1000;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // background gradient
+    const bg = ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0, '#fde6ec');
+    bg.addColorStop(1, '#fbd0dd');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
+
+    // gingham-ish border pattern (simple checks)
+    ctx.strokeStyle = 'rgba(247,184,201,0.6)';
+    ctx.lineWidth = 2;
+    for(let x=0; x<W; x+=40){
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+    }
+    for(let y=0; y<H; y+=40){
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+
+    // card panel
+    const pad = 50;
+    roundRect(ctx, pad, pad, W-pad*2, H-pad*2, 36);
+    ctx.fillStyle = '#fffaf9';
+    ctx.fill();
+
+    // bows
+    ctx.font = '40px serif';
+    ctx.fillText('🎀', 70, 110);
+    ctx.fillText('🎀', W-130, 110);
+    ctx.fillText('🎀', 70, H-60);
+    ctx.fillText('🎀', W-130, H-60);
+
+    // big emoji
+    ctx.font = '160px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(emoji, W/2, 320);
+
+    // title
+    ctx.fillStyle = '#e8628c';
+    ctx.font = 'bold 46px Quicksand, sans-serif';
+    ctx.fillText('Our Treat Pick', W/2, 410);
+
+    ctx.fillStyle = '#d94f78';
+    ctx.font = 'bold 38px Quicksand, sans-serif';
+    ctx.fillText(treat, W/2, 470);
+
+    // message wrapped
+    ctx.fillStyle = '#7a3b52';
+    ctx.font = '26px Nunito, sans-serif';
+    wrapText(ctx, message, W/2, 560, W-180, 38);
+
+    // footer
+    ctx.fillStyle = '#d94f78';
+    ctx.font = '24px Quicksand, sans-serif';
+    ctx.fillText('made with 🩷 for Bubbly', W/2, H-90);
+
+    canvas.toBlob((blob)=>{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bubbly-treat-${treat.replace(/\s+/g,'-').toLowerCase()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+    const words = text.split(' ');
+    let line = '';
+    let curY = y;
+    ctx.textAlign = 'center';
+    for(let n=0; n<words.length; n++){
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if(metrics.width > maxWidth && n > 0){
+        ctx.fillText(line, x, curY);
+        line = words[n] + ' ';
+        curY += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, curY);
+  }
+</script>
+</body>
+</html>
